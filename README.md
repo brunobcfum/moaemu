@@ -1,4 +1,4 @@
-# pymace - Python Mobile Ad-Hoc Computing Emulator
+# Moaemu - Mobile Ad-Hoc Emulation Framework
 This software is part of the paper: MACE: Mobile Ad-Hoc Computing Emulator
 
 ## Installation
