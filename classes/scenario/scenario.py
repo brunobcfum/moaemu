@@ -43,32 +43,18 @@ class Scenario():
     self.mobile_wlan = WlanNode
     self.cwd = os.getcwd() #TODO, create an option so that we don't need this
 
-    self._setup(scenario_json)
+    #self._setup(scenario_json)
 
-    self.list_of_fixed_nodes = []
-    self.wlans = {}
-    self.node_options_fixed = []
-    self.node_options_mobile = []
-    self.networks = {}
-    self.core_nodes = {}
-    self.core_nodes_by_name= {}
-    self.node_options = {}
-    self.prefixes = {}
-    self.etcd_cluster = {}
-    self.mace_nodes = []
-    self.simulation_time = 0
-    self.running = False
-    self.load_networks(scenario_json)
-    self.load_nodes(scenario_json)
 
-    self.start() #started from emulatior
+
+    #self.start() #started from emulatior
 
   def start(self):
     """_summary_
     """
     self.running = True
 
-  def _setup(self, scenario_json):
+  def setup(self, scenario_json):
     """_summary_
 
     Args:
@@ -87,6 +73,23 @@ class Scenario():
     except:
       print("Error loading configurations. Check traceback log for more information")
       traceback.print_exc()
+      return False
+    self.list_of_fixed_nodes = []
+    self.wlans = {}
+    self.node_options_fixed = []
+    self.node_options_mobile = []
+    self.networks = {}
+    self.core_nodes = {}
+    self.core_nodes_by_name= {}
+    self.node_options = {}
+    self.prefixes = {}
+    self.etcd_cluster = {}
+    self.mace_nodes = []
+    self.simulation_time = 0
+    self.running = False
+    self.load_networks(scenario_json)
+    self.load_nodes(scenario_json)
+    return True
 
   def load_networks(self, scenario_json):
     """_summary_

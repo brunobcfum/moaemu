@@ -57,7 +57,7 @@ class Mobility():
     """
     #print("mobility>configure_mobility> corenodes: " + str(len(self.core_nodes)) + " mace nodes: " + str(len(self.mace_nodes)))
     if self.mobility_model.upper()   == 'RANDOM_WAYPOINT':
-      self.mobility_object = random_waypoint(len(self.core_nodes), dimensions=(self.x_dim , self.y_dim ), velocity=(self.velocity_lower, self.velocity_upper), wt_max=1.0)
+      self.mobility_object = random_waypoint(len(self.core_nodes), dimensions=(self.x_dim , self.y_dim ), velocity=(self.velocity_lower, self.velocity_upper), wt_max=0.0)
       self.mobility_thread.start()
     elif self.mobility_model.upper() == 'RANDOM_WALK':
       self.mobility_object = random_walk(len(self.core_nodes), dimensions=(self.x_dim , self.y_dim ), velocity=self.velocity_upper, distance=self.velocity_upper)
@@ -92,6 +92,10 @@ class Mobility():
       self.mobility_object = Attraction(self.pos, self.velocity_upper, self.velocity_lower)
       self.mobility_thread = threading.Thread(target=self.pymace_mobility_update, args=())
       self.mobility_thread.start()
+    elif self.mobility_model.upper() == 'RANDOMWAYPOINT':
+      self.mobility_object = RandomWaypoint(self.pos, dimensions=(self.x_dim , self.y_dim ), velocity=(self.velocity_lower, self.velocity_upper), dt=self.update_interval)
+      self.mobility_thread = threading.Thread(target=self.pymace_mobility_update, args=())
+      self.mobility_thread.start()
 
   def pymace_mobility_update(self):
     """_summary_
@@ -122,7 +126,6 @@ class Mobility():
       try: 
         positions = next(self.mobility_object)
         it = 0
-
         for node in self.mace_nodes:
           node.corenode.setposition(positions[it][0],positions[it][1])
           node.set_position((positions[it][0],positions[it][1]))

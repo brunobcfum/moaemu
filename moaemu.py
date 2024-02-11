@@ -50,15 +50,15 @@ class Mace():
         self.daemon = Daemon(self.emulator, self.emulation_data, self.daemon_callback)
         if args.daemon == True:
           self.emulator.set_daemon_socket(self.daemon.get_socket())
-          logging.info("Starting MACE daemon")
+          logging.info("Starting MOAEMU daemon")
           self.daemon.start()
         else:
           if args.scenario != None:
+            self._setup_emulation(self.emulator, args.scenario)
+            self._start(self.emulator, 1)
             self.socket_thread = threading.Thread(target=self.daemon.start, args=())
             self.socket_thread.start()
             self.emulator.set_daemon_socket(self.daemon.get_socket())
-            self._setup_emulation(self.emulator, args.scenario)
-            self._start(self.emulator, 1)
           else:
             logging.error("Not running in daemon mode and no scenario was passed as argument. Exiting.")
         self._shutdown()
@@ -123,9 +123,11 @@ class Mace():
       """
       emulation_file = open(scenario,"r").read()
       emulation_config = json.loads(emulation_file)
-      emulator.setup(emulation_config)
-      #TODO wait answer
-      self.scenario_loaded = True
+      if (emulator.setup(emulation_config)):
+        #TODO wait answer
+        self.scenario_loaded = True
+      else:
+        sys.exit(1)
 
     def _start(self, emulator, repetitions, daemon=None):
       """ 
@@ -224,7 +226,7 @@ def print_header():
   --------
 
   """
-  print("pymace v." + __version__)
+  print("moaemu v." + __version__)
   print("Framework for testing distributed algorithms in dynamic networks")
   print()
 
@@ -293,7 +295,6 @@ def xhost():
 
   """
   subprocess.run(["xhost", "+"]) 
-
 
 def load_settings():
   """Method for laoding the main settings from a file

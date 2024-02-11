@@ -65,7 +65,11 @@ class Emulator(Runner):
         scenario_config (_type_): _description_
     """
     self.scenario = Scenario(scenario_config)
-
+    if (self.scenario.setup(scenario_config)):
+      self.scenario.start()
+      return True
+    return False
+  
   def callback(self):
     pass
 

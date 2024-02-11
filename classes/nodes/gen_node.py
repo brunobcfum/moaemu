@@ -48,6 +48,7 @@ class GenericNode():
         (coordinates[2] < self.max_position[2] and coordinates[2] >= 0)):
       self.coordinates = coordinates
       self.position = coordinates
+      self.gps.set_position(coordinates)
       self.tracer.add_postition_trace(self.simulation_time_ms, coordinates)
 
   def get_position(self):
